@@ -41,7 +41,7 @@ jobs:
       - name: Generate and build documentation
         working-directory: wiki
         env:
-          DOCS_BASE: /RelicPRisonDocs/
+          DOCS_BASE: /RelicPrisonDocs/
         run: npm run docs:build
       - name: Upload documentation build artifact
         uses: actions/upload-artifact@v7
