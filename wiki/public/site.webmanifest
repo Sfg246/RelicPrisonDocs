@@ -1,14 +1,14 @@
 {
   "name": "RelicPrison Documentation",
   "short_name": "RelicPrison",
-  "start_url": "/RelicPrison/",
-  "scope": "/RelicPrison/",
+  "start_url": "/RelicPrisonDocs/",
+  "scope": "/RelicPrisonDocs/",
   "display": "standalone",
   "background_color": "#0b0b12",
   "theme_color": "#7c3aed",
   "icons": [
     {
-      "src": "/RelicPrison/plugin-icon-live.webp",
+      "src": "/RelicPrisonDocs/plugin-icon-live.webp",
       "sizes": "any",
       "type": "image/webp",
       "purpose": "any"
