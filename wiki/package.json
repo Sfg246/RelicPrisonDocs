@@ -1,0 +1,19 @@
+{
+  "name": "relicprison-public-docs",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "docs:generate:assets": "node scripts/generate-assets.mjs",
+    "docs:generate:config": "node scripts/generate-config-reference.mjs",
+    "docs:generate:status": "node scripts/generate-project-status.mjs",
+    "docs:generate": "npm run docs:generate:assets && npm run docs:generate:config && npm run docs:generate:status",
+    "docs:dev": "npm run docs:generate && vitepress dev .",
+    "docs:build": "npm run docs:generate && vitepress build .",
+    "docs:preview": "vitepress preview ."
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "yaml": "^2.8.1"
+  }
+}

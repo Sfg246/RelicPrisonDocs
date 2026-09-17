@@ -1,0 +1,36 @@
+# sell-prices.yml
+
+The table is generated from the current packaged YAML, so defaults stay synchronized with the source.
+
+**Source:** [`src/main/resources/sell-prices.yml`](https://github.com/Sfg246/RelicPRisonDocs/blob/main/snapshots/resources/sell-prices.yml)
+
+**Documented leaves:** 22
+
+| Setting | Type | Packaged default | Recommended starting point | What it changes | Risk / common mistake |
+| --- | --- | --- | --- | --- | --- |
+| `file-version` | number | `3` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `file-version` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `settings.allow-items-with-lore` | boolean | `false` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `allow-items-with-lore` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `settings.allow-custom-items-with-lore` | boolean | `false` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `allow-custom-items-with-lore` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `settings.minimum-payout` | number | `0.01` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets the lower bound used by the related system. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `settings.rounding-scale` | number | `2` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `rounding-scale` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.COBBLESTONE` | number | `1` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `COBBLESTONE` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.STONE` | number | `1` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `STONE` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.COAL` | number | `4` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `COAL` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.IRON_INGOT` | number | `8` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `IRON_INGOT` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.RAW_IRON` | number | `7` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `RAW_IRON` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.RAW_GOLD` | number | `9` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `RAW_GOLD` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.GOLD_INGOT` | number | `10` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `GOLD_INGOT` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.REDSTONE` | number | `14` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `REDSTONE` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.DIAMOND` | number | `20` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `DIAMOND` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.COAL_BLOCK` | number | `23.21` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `COAL_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.IRON_BLOCK` | number | `33.93` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `IRON_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.GOLD_BLOCK` | number | `53.57` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `GOLD_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.REDSTONE_BLOCK` | number | `71.43` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `REDSTONE_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.DIAMOND_BLOCK` | number | `93.75` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `DIAMOND_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.EMERALD_BLOCK` | number | `142.86` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `EMERALD_BLOCK` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `prices.END_STONE` | number | `245.54` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `END_STONE` for this section of sell-prices.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `custom-prices` | object | `{}` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets an economy amount used by the related action. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+
+::: tip Safe editing loop
+Back up first, change one idea at a time, reload only supported modules, then run `/rp validate` and `/rp diagnose`. Use a full restart for storage/backend changes or anything the plugin documents as startup-only.
+:::

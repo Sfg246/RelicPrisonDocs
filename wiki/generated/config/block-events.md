@@ -1,0 +1,33 @@
+# block-events.yml
+
+The table is generated from the current packaged YAML, so defaults stay synchronized with the source.
+
+**Source:** [`src/main/resources/block-events.yml`](https://github.com/Sfg246/RelicPRisonDocs/blob/main/snapshots/resources/block-events.yml)
+
+**Documented leaves:** 19
+
+| Setting | Type | Packaged default | Recommended starting point | What it changes | Risk / common mistake |
+| --- | --- | --- | --- | --- | --- |
+| `file-version` | number | `2` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `file-version` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.enabled` | boolean | `false` | Begin with the packaged default, then enable features one at a time on staging. | Turns this feature or behavior on or off. | Enabling a dependency-backed feature before its dependency is ready can fail validation or behavior checks. |
+| `events.lucky-miner.priority` | number | `100` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `priority` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.trigger` | string | `chance-per-action` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `trigger` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.mining-type` | string | `both` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `mining-type` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.chance` | number | `0.01` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `chance` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.cooldown-seconds` | number | `60` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Controls a duration or timing value for this behavior. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.blocks` | list | `["DIAMOND_ORE","EMERALD_ORE"]` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `blocks` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.mines` | list | `[]` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `mines` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.minimum-rank` | null | `null` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets the lower bound used by the related system. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.minimum-prestige` | null | `null` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets the lower bound used by the related system. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.permissions` | list | `[]` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Names the permission node checked for the related action. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.per-action-command-limit` | number | `4` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets a safety or capacity limit for the related system. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.per-action-reward-limit` | number | `16` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Sets a safety or capacity limit for the related system. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.rewards.money` | number | `1000` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `money` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.rewards.items[0].id` | string | `DIAMOND` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Stores the stable identifier used to reference this object. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.rewards.items[0].amount` | number | `1` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `amount` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+| `events.lucky-miner.rewards.commands` | list | `["say %player% found a lucky mining reward after %blocks% blocks"]` | Start empty, then add only commands you have tested for duplicate/retry behavior. | Configures `commands` for this section of block-events.yml. | Third-party commands cannot participate in RelicPrison’s SQL transaction and may not be exactly-once. |
+| `events.lucky-miner.rewards.announcements` | list | `[]` | Keep the packaged default for the first successful staging run; tune only with a specific reason. | Configures `announcements` for this section of block-events.yml. | Wrong type or unsupported value can fail validation/reload or change gameplay unexpectedly. |
+
+::: tip Safe editing loop
+Back up first, change one idea at a time, reload only supported modules, then run `/rp validate` and `/rp diagnose`. Use a full restart for storage/backend changes or anything the plugin documents as startup-only.
+:::
