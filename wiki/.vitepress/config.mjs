@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 const base = process.env.DOCS_BASE || '/'
 const productionOrigin = 'https://sfg246.github.io'
-const productionBase = '/RelicPRisonDocs'
+const productionBase = '/RelicPrisonDocs'
 
 function canonicalUrl(relativePath) {
   let route = relativePath
@@ -22,7 +22,7 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   base,
-  sitemap: { hostname: 'https://sfg246.github.io/RelicPRisonDocs/' },
+  sitemap: { hostname: 'https://sfg246.github.io/RelicPrisonDocs/' },
   transformPageData(pageData) {
     if (pageData.relativePath === '404.md') return
 
@@ -42,19 +42,19 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'RelicPrison Docs' }],
     ['meta', { property: 'og:description', content: 'Build, operate, troubleshoot, upgrade, and extend RelicPrison without guessing.' }],
-    ['meta', { property: 'og:image', content: 'https://sfg246.github.io/RelicPRisonDocs/social-card.svg' }],
+    ['meta', { property: 'og:image', content: 'https://sfg246.github.io/RelicPrisonDocs/social-card.svg' }],
     ['meta', { property: 'og:image:alt', content: 'RelicPrison documentation' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'RelicPrison Docs' }],
     ['meta', { name: 'twitter:description', content: 'Build, operate, troubleshoot, upgrade, and extend RelicPrison without guessing.' }],
-    ['meta', { name: 'twitter:image', content: 'https://sfg246.github.io/RelicPRisonDocs/social-card.svg' }]
+    ['meta', { name: 'twitter:image', content: 'https://sfg246.github.io/RelicPrisonDocs/social-card.svg' }]
   ],
   markdown: { lineNumbers: true },
   themeConfig: {
     logo: '/plugin-icon-live.webp',
     siteTitle: 'RelicPrison',
     search: { provider: 'local' },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/Sfg246/RelicPRisonDocs' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/Sfg246/RelicPrisonDocs' }],
     nav: [
       { text: 'Setup', items: [
         { text: 'Setup Journey', link: '/guide/installation' },
@@ -90,7 +90,7 @@ export default defineConfig({
         { text: '1.0.0 Release', link: '/releases/1.0.0' },
         { text: 'RC6 History', link: '/releases/rc6' }
       ]},
-      { text: 'Support', link: 'https://github.com/Sfg246/RelicPRisonDocs/issues' }
+      { text: 'Support', link: 'https://github.com/Sfg246/RelicPrisonDocs/issues' }
     ],
     sidebar: [
       {
@@ -192,7 +192,7 @@ export default defineConfig({
     ],
     outline: { level: [2, 3], label: 'On this page' },
     editLink: {
-      pattern: 'https://github.com/Sfg246/RelicPRisonDocs/edit/main/wiki/:path',
+      pattern: 'https://github.com/Sfg246/RelicPrisonDocs/edit/main/wiki/:path',
       text: 'Edit this page on GitHub'
     },
     lastUpdated: { text: 'Updated' },
