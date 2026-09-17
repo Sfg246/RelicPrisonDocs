@@ -17,6 +17,6 @@ cd wiki
 npm run docs:build
 ```
 
-The build regenerates source-driven YAML and Java API reference pages before VitePress compiles the site.
+The build regenerates the YAML reference from the released configuration snapshots in `snapshots/resources`, refreshes release-status pages from the public changelog/limitations files, and then builds VitePress.
 
-Public documentation lives here under `wiki/`. Engineering history, implementation notes, verification reports, and internal handoffs remain under the repository-level `docs/` directory.
+The generated API pages are public signature snapshots from RelicPrison 1.0.0. The plugin implementation source, private engineering notes, tests, and paid JARs are intentionally not stored in this repository.
