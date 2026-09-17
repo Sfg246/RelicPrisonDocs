@@ -7,7 +7,7 @@ const here = path.dirname(fileURLToPath(import.meta.url))
 const wikiRoot = path.resolve(here, '..')
 const resourcesRoot = path.resolve(wikiRoot, '../snapshots/resources')
 const outputRoot = path.resolve(wikiRoot, 'generated/config')
-const repoBase = 'https://github.com/Sfg246/RelicPRisonDocs/blob/main/snapshots/resources/'
+const repoBase = 'https://github.com/Sfg246/RelicPrisonDocs/blob/main/snapshots/resources/'
 
 const SPECIAL = {
   'storage.yml:type': ['SQLITE for a single server; MYSQL for deliberately shared multi-server data.', 'Changing database type without a migration plan can make existing data appear missing.'],
