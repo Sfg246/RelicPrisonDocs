@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sfg246.github.io/RelicPRisonDocs/sitemap.xml
+Sitemap: https://sfg246.github.io/RelicPrisonDocs/sitemap.xml
