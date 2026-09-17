@@ -2,7 +2,7 @@
 
 Public website and documentation source for RelicPrison.
 
-**Documentation:** https://sfg246.github.io/RelicPRisonDocs/
+**Documentation:** https://sfg246.github.io/RelicPrisonDocs/
 
 This repository intentionally contains **no RelicPrison implementation source code and no paid plugin JARs**. The plugin implementation is maintained separately in a private repository.
 
