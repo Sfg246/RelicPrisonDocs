@@ -1,4 +1,4 @@
-name: One-time RelicPrison docs migration
+name: Migrate RelicPrison Docs
 
 on:
   push:
@@ -18,12 +18,17 @@ jobs:
         with:
           path: docs-repo
 
-      - name: Check out current RelicPrison source while it is public
+      - name: Check out RelicPrison source for one-time migration
         uses: actions/checkout@v7
         with:
           repository: Sfg246/RelicPrison
           ref: main
           path: source-repo
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
       - name: Generate current source-driven references
         working-directory: source-repo/wiki
@@ -31,139 +36,10 @@ jobs:
           npm install --no-audit --no-fund
           npm run docs:generate
 
-      - name: Copy public documentation and safe configuration snapshots
-        run: |
-          set -euo pipefail
-          cd "$GITHUB_WORKSPACE/docs-repo"
-          rm -rf wiki snapshots
-          cp -a "$GITHUB_WORKSPACE/source-repo/wiki" ./wiki
-          rm -rf wiki/node_modules wiki/.vitepress/cache wiki/.vitepress/dist
-          cp "$GITHUB_WORKSPACE/source-repo/CHANGELOG.md" ./CHANGELOG.md
-          cp "$GITHUB_WORKSPACE/source-repo/KNOWN-LIMITATIONS-1.0.0.md" ./KNOWN-LIMITATIONS-1.0.0.md
-          mkdir -p snapshots/resources
-          cp -a "$GITHUB_WORKSPACE/source-repo/src/main/resources/." ./snapshots/resources/
-          rm -f snapshots/resources/plugin.yml
+      - name: Separate public documentation from plugin source
+        run: python3 docs-repo/.github/scripts/migrate_docs.py source-repo docs-repo
 
-      - name: Make documentation repository self-contained
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import json, re
-
-          root = Path('docs-repo')
-          wiki = root / 'wiki'
-
-          # The public docs repo must never need the private plugin source to build.
-          p = wiki / 'scripts/generate-config-reference.mjs'
-          s = p.read_text()
-          s = s.replace("const resourcesRoot = path.resolve(wikiRoot, '../src/main/resources')", "const resourcesRoot = path.resolve(wikiRoot, '../snapshots/resources')")
-          s = s.replace("const repoBase = 'https://github.com/Sfg246/RelicPrison/blob/main/src/main/resources/'", "const repoBase = 'https://github.com/Sfg246/RelicPRisonDocs/blob/main/snapshots/resources/'")
-          s = s.replace('from `src/main/resources`', 'from the released configuration snapshots in `snapshots/resources`')
-          s = s.replace('`src/main/resources/${pretty(file)}`', '`snapshots/resources/${pretty(file)}`')
-          s = s.replace('packaged YAML as the source of truth', 'released configuration snapshots as the public source of truth')
-          p.write_text(s)
-
-          # API signatures were generated from the release source during migration.
-          # Keep the generated Markdown public, but do not require or publish Java source.
-          pkg_path = wiki / 'package.json'
-          pkg = json.loads(pkg_path.read_text())
-          pkg['name'] = 'relicprison-public-docs'
-          pkg['scripts']['docs:generate'] = 'npm run docs:generate:assets && npm run docs:generate:config && npm run docs:generate:status'
-          pkg['scripts'].pop('docs:generate:api', None)
-          pkg_path.write_text(json.dumps(pkg, indent=2) + '\n')
-          (wiki / 'scripts/generate-api-reference.mjs').unlink(missing_ok=True)
-
-          for api_file in (wiki / 'generated/api').glob('*.md'):
-              text = api_file.read_text()
-              text = re.sub(r'\[View source\]\(https://github\.com/Sfg246/RelicPrison/[^\n]+\)\n\n', '_Public API signature snapshot from RelicPrison 1.0.0._\n\n', text)
-              text = text.replace('Generated from the public Java API package during every documentation build.', 'Snapshot generated from the public RelicPrison 1.0.0 API before the plugin source was made private.')
-              text = text.replace('Generated from `api/event`. Event names are never hand-maintained here, so newly committed public events automatically appear in the docs build.', 'Snapshot generated from the RelicPrison 1.0.0 public event API before the plugin source was made private.')
-              api_file.write_text(text)
-
-          # New Pages path and public repository links.
-          config = wiki / '.vitepress/config.mjs'
-          text = config.read_text()
-          text = text.replace("const productionBase = '/RelicPrison'", "const productionBase = '/RelicPRisonDocs'")
-          text = text.replace('https://sfg246.github.io/RelicPrison/', 'https://sfg246.github.io/RelicPRisonDocs/')
-          text = text.replace('https://sfg246.github.io/RelicPrison/social-card.svg', 'https://sfg246.github.io/RelicPRisonDocs/social-card.svg')
-          text = text.replace("socialLinks: [{ icon: 'github', link: 'https://github.com/Sfg246/RelicPrison' }]", "socialLinks: [{ icon: 'github', link: 'https://github.com/Sfg246/RelicPRisonDocs' }]")
-          text = text.replace("{ text: 'Support', link: 'https://github.com/Sfg246/RelicPrison/issues' }", "{ text: 'Support', link: 'https://github.com/Sfg246/RelicPRisonDocs/issues' }")
-          text = text.replace("pattern: 'https://github.com/Sfg246/RelicPrison/edit/main/wiki/:path'", "pattern: 'https://github.com/Sfg246/RelicPRisonDocs/edit/main/wiki/:path'")
-          text = text.replace("message: 'Source-driven RelicPrison documentation'", "message: 'Public RelicPrison documentation'")
-          text = text.replace("copyright: 'Defaults and generated references are built from the live repository.'", "copyright: 'Configuration references are built from released public snapshots; plugin implementation remains private.'")
-          config.write_text(text)
-
-          # Replace old public-site URLs in public text/static files.
-          text_exts = {'.md', '.mjs', '.js', '.json', '.txt', '.svg', '.xml', '.yml', '.yaml'}
-          for f in wiki.rglob('*'):
-              if not f.is_file() or f.suffix.lower() not in text_exts:
-                  continue
-              try:
-                  t = f.read_text()
-              except UnicodeDecodeError:
-                  continue
-              t = t.replace('https://sfg246.github.io/RelicPrison/', 'https://sfg246.github.io/RelicPRisonDocs/')
-              f.write_text(t)
-
-          # Public release page must not point buyers at private source or free JARs.
-          (wiki / 'releases/index.md').write_text('''# Release & Download Status
-
-<div class="release-hero">
-<strong>Current release:</strong> <code>RelicPrison 1.0.0</code><br><br>
-<span class="status-pill">Paper 1.21.5–26.2 startup tested</span>
-<span class="status-pill">Java 25</span>
-<span class="status-pill">Stable / final</span>
-</div>
-
-## Release status
-
-`1.0.0` is the official stable RelicPrison release. The exact release JAR has been startup-tested on Paper `1.21.5`, `1.21.6`, `1.21.7`, `1.21.8`, `1.21.9`, `1.21.10`, `1.21.11`, `26.1.1`, `26.1.2`, and `26.2` using Java 25.
-
-Paper `1.21.4` and older are not advertised as supported by the current 1.0.0 JAR.
-
-## Where do I download RelicPrison?
-
-RelicPrison is distributed through its official marketplace listing. The plugin source repository and release binaries are private and are not distributed through this documentation repository.
-
-This repository contains documentation, released configuration snapshots, and public API signature references only.
-
-## Before installing
-
-1. Use Paper within the documented startup-tested range.
-2. Use Java 25.
-3. Install Vault, LuckPerms, and a Vault-compatible economy provider.
-4. Verify optional integrations before enabling them on a production server.
-5. Read the manual verification boundaries in [Known Limitations](/known-limitations).
-
-See [1.0.0 Release Notes](/releases/1.0.0), [Compatibility Matrix](/reference/compatibility), and [Known Limitations](/known-limitations).
-''')
-
-          # Public repository README.
-          (root / 'README.md').write_text('''# RelicPrison Documentation
-
-Public website and documentation source for RelicPrison.
-
-**Documentation:** https://sfg246.github.io/RelicPRisonDocs/
-
-This repository intentionally contains **no RelicPrison implementation source code and no paid plugin JARs**. The plugin implementation is maintained separately in a private repository.
-
-## What is public here
-
-- Installation and setup guides
-- System documentation
-- Commands, permissions, placeholders, and compatibility references
-- Released configuration snapshots used by the generated YAML reference
-- Public API signature snapshots
-- Upgrade, troubleshooting, recovery, and release documentation
-
-The VitePress website source lives in [`wiki/`](wiki/README.md).
-''')
-
-          # Ignore local/build products.
-          (root / '.gitignore').write_text('''wiki/node_modules/\nwiki/.vitepress/cache/\nwiki/.vitepress/dist/\n.DS_Store\n''')
-          PY
-
-      - name: Install and verify standalone documentation build
+      - name: Verify standalone documentation build
         working-directory: docs-repo/wiki
         env:
           DOCS_BASE: /RelicPRisonDocs/
@@ -171,90 +47,11 @@ The VitePress website source lives in [`wiki/`](wiki/README.md).
           npm install --no-audit --no-fund
           npm run docs:build
 
-      - name: Install permanent documentation deployment workflow
+      - name: Commit migrated documentation
+        working-directory: docs-repo
         run: |
-          mkdir -p docs-repo/.github/workflows
-          cat > docs-repo/.github/workflows/docs.yml <<'YAML'
-          name: Docs Build & Deploy
-
-          on:
-            push:
-              branches: [main]
-              paths:
-                - 'wiki/**'
-                - 'snapshots/**'
-                - 'CHANGELOG.md'
-                - 'KNOWN-LIMITATIONS-*.md'
-                - '.github/workflows/docs.yml'
-            pull_request:
-              paths:
-                - 'wiki/**'
-                - 'snapshots/**'
-                - 'CHANGELOG.md'
-                - 'KNOWN-LIMITATIONS-*.md'
-                - '.github/workflows/docs.yml'
-            workflow_dispatch:
-
-          permissions:
-            contents: read
-            pages: write
-            id-token: write
-
-          concurrency:
-            group: pages
-            cancel-in-progress: false
-
-          jobs:
-            build-docs:
-              runs-on: ubuntu-latest
-              steps:
-                - uses: actions/checkout@v7
-                - uses: actions/setup-node@v7
-                  with:
-                    node-version: '22'
-                - name: Install documentation dependencies
-                  working-directory: wiki
-                  run: npm install --no-audit --no-fund
-                - name: Generate and build documentation
-                  working-directory: wiki
-                  env:
-                    DOCS_BASE: /RelicPRisonDocs/
-                  run: npm run docs:build
-                - name: Upload documentation build artifact
-                  uses: actions/upload-artifact@v7
-                  with:
-                    name: relicprison-docs-site
-                    path: wiki/.vitepress/dist
-                    if-no-files-found: error
-                - name: Configure GitHub Pages
-                  if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-                  uses: actions/configure-pages@v5
-                - name: Upload GitHub Pages artifact
-                  if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-                  uses: actions/upload-pages-artifact@v3
-                  with:
-                    path: wiki/.vitepress/dist
-
-            deploy:
-              if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-              environment:
-                name: github-pages
-                url: ${{ steps.deployment.outputs.page_url }}
-              runs-on: ubuntu-latest
-              needs: build-docs
-              steps:
-                - name: Deploy to GitHub Pages
-                  id: deployment
-                  uses: actions/deploy-pages@v4
-          YAML
-
-      - name: Remove one-time migration workflow and commit
-        run: |
-          set -euo pipefail
-          cd docs-repo
-          rm -f .github/workflows/migrate-docs.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -m 'docs: separate public RelicPrison website from private plugin source'
+          git commit -m 'docs: separate public website from private plugin source'
           git push
